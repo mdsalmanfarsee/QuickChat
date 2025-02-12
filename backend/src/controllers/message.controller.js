@@ -34,5 +34,34 @@ const getMessages = async (req, res) => {
 }
 
 
+const sendMessage = async (req, res) => {
+    try {
+        const { text, image } = req.body;
+        const { id: receiverId } = req.params;
+        const senderId = req.user._id;
+        let imageUrl;
+        if (image) {
+            const upload = await cloudinary.uploader.upload(image);
+            imageUrl = upload.secure_url;
+        }
 
-export { getUsersForSidebar, getMessages };
+        const newMessage = new Message({
+            senderId,
+            receiverId,
+            text,
+            image: imageUrl
+        });
+
+        await newMessage.save();
+
+        //todo: send socket.io message to the receiver
+
+        return res.status(200).json(newMessage);
+
+    } catch (error) {
+        console.log("error in sendMessage: ");
+        return res.status(500).json({ message: "Internal server error" });
+    }
+}
+
+export { getUsersForSidebar, getMessages, sendMessage };
