@@ -12,13 +12,13 @@ const app = express();
 // Connect to database
 connectDB();
 const PORT = process.env.PORT || 5000;
+const FRONTEND_URL = process.env.FRONTEND_URL;
 
 
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-    origin: 'http://localhost:5173',
-    //origin: '*', // allow all origins
+    origin: [FRONTEND_URL, 'http://localhost:5173'],
     credentials: true
 }))
 app.use('/api/auth', authRouter);
