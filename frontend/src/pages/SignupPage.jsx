@@ -3,10 +3,13 @@ import { useState } from 'react'
 import { useAuthStore } from '../store/useAuthStore.js'
 import { Eye, EyeOff, Lock, Mail, MessageSquare, User, Loader2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import toast from 'react-hot-toast';
+
+
 
 const SignupPage = () => {
 
-    const { isSigningUp } = useAuthStore();
+    const { signup, isSigningUp } = useAuthStore();
 
     const [showPassword, setshowPassword] = useState(false);
     const [formData, setformData] = useState(
@@ -17,8 +20,28 @@ const SignupPage = () => {
         }
     );
 
-    const validateForm = () => { };
-    const handleSubmit = () => { };
+    const validateForm = () => {
+        if (!formData.fullName.trim()) {
+            return toast.error('Full name is required');
+        }
+        if (!formData.email.trim()) {
+            return toast.error('Email is required');
+        }
+        if (!formData.password.trim()) {
+            return toast.error('Password is required');
+        }
+        if (formData.password.length < 6) {
+            return toast.error('Password must be at least 6 characters');
+        }
+        return true;
+    };
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const success = validateForm();
+        if (success) {
+            signup(formData);
+        }
+    };
 
 
     return (
@@ -127,7 +150,7 @@ const SignupPage = () => {
             </div>
         </div>
     )
-    //2:00:00
+
 }
 
 export default SignupPage
