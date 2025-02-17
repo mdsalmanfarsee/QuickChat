@@ -10,6 +10,7 @@ export const generateToken = (userId, res) => {
     res.cookie("jwt", token, {
         maxAge: 7 * 24 * 60 * 60 * 1000, //ms
         httpOnly: true, //cookie cannot be accessed by client side script
+        sameSite: 'None',
     })
     return token;
 }
