@@ -3,6 +3,7 @@ import Navbar from './components/Navbar'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { useEffect } from 'react'
 import { useAuthStore } from './store/useAuthStore.js'
+import { useThemeStore } from './store/useThemeStore.js'
 
 import HomePage from './pages/Homepage'
 import SignupPage from './pages/SignupPage'
@@ -18,6 +19,7 @@ import { Toaster } from 'react-hot-toast'
 
 const App = () => {
   const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
+  const { theme } = useThemeStore();
   useEffect(() => {
     checkAuth();
   }, [checkAuth])
@@ -33,14 +35,14 @@ const App = () => {
 
 
   return (
-    <div>
+    <div data-theme={theme}>
 
       <Navbar />
       <Routes>
         <Route path='/' element={authUser ? <HomePage /> : <Navigate to="/login" />} />
         <Route path='/signup' element={!authUser ? <SignupPage /> : <Navigate to="/" />} />
         <Route path='/login' element={!authUser ? <LoginPage /> : <Navigate to="/" />} />
-        <Route path='/setting' element={<SettingPage />} />
+        <Route path='/settings' element={<SettingPage />} />
         <Route path='/profile' element={authUser ? <ProfilePage /> : <Navigate to="/login" />} />
       </Routes>
 
