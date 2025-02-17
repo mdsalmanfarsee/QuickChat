@@ -36,6 +36,7 @@ const signup = async (req, res) => {
                 profilepic: newUser.profilepic,
                 fullName: newUser.fullName,
                 email: newUser.email,
+                createdAt: user.createdAt,
             });
 
         }
@@ -69,6 +70,7 @@ const login = async (req, res) => {
             profilepic: user.profilepic,
             fullName: user.fullName,
             email: user.email,
+            createdAt: user.createdAt,
         });
 
     } catch (error) {
@@ -88,14 +90,16 @@ const logout = (req, res) => {
 }
 
 const updateProfile = async (req, res) => {
-    const { profilePic } = req.body;
-    if (!profilePic) {
+    const { profilepic } = req.body;
+    if (!profilepic) {
         return res.status(400).json({ message: "Please provide profile picture" });
     }
 
+
+
     try {
         //upload to cloudinary
-        const upload = await cloudinary.uploader.upload(profilePic);
+        const upload = await cloudinary.uploader.upload(profilepic);
 
         //update user profile pic
         const userId = req.user._id;
@@ -103,7 +107,9 @@ const updateProfile = async (req, res) => {
 
         return res.status(200).json({ updatedUser, message: "Profile picture updated successfully" });
     } catch (error) {
-        return res.status(500).json({ message: "Internal server error" });
+        console.log('error in cloudinary:', error);
+
+        return res.status(500).json({ message: "Internal server error while updating" });
     }
 }
 

@@ -3,24 +3,41 @@ import { useState } from 'react'
 import { useAuthStore } from '../store/useAuthStore.js'
 import { Eye, EyeOff, Lock, Mail, MessageSquare, User, Loader2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 
 
 const LoginPage = () => {
 
-    const { isLoggingIn } = useAuthStore();
+    const { login, isLoggingIn } = useAuthStore();
 
     const [showPassword, setshowPassword] = useState(false);
     const [formData, setformData] = useState(
         {
             email: "",
-            password: "",
-            fullName: ""
+            password: ""
         }
     );
 
-    const validateForm = () => { };
-    const handleSubmit = () => { };
+    const validateForm = () => {
+        if (!formData.email) {
+            return toast.error('Email is required');
+        }
+        if (!formData.password) {
+            return toast.error('Password is required');
+        }
+        return true;
+    };
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const success = validateForm();
+        if (success) {
+            login(formData);
+        }
+        else {
+            console.log('error in form validation');
+        }
+    };
 
     return (
         <div className='min-h-screen grid'>

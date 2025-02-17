@@ -13,7 +13,7 @@ export const useAuthStore = create((set) => ({
     checkAuth: async () => {
         try {
             const res = await axiosInstance.get('/auth/check');
-            set({ authUser: res.data });
+            set({ authUser: res.data.user });
         } catch (error) {
             console.log('error in checkAuth:', error);
 
@@ -29,9 +29,10 @@ export const useAuthStore = create((set) => ({
         try {
             const res = await axiosInstance.post('/auth/signup', data);
             set({ authUser: res.data });
-            toast.success('Account created successfully');
+            toast.success(res.data.message);
         } catch (error) {
             toast.error(error.response.data.message);
+            console.log('error in signup:', error);
         }
         finally {
             set({ isSigningUp: false });
@@ -39,11 +40,52 @@ export const useAuthStore = create((set) => ({
     },
     logout: async () => {
         try {
-            await axios.post('/auth/logout');
+            await axiosInstance.post('/auth/logout');
             set({ authUser: null });
             toast.success('Logged out successfully');
         } catch (error) {
-            toast.error(error.response.data.message);
+            console.log('error in logout:', error);
+
+            toast.error('An error occurred while logging out');
         }
+    },
+
+    login: async (data) => {
+        set({ isLoggingIn: true });
+        try {
+            const res = await axiosInstance.post('auth/login', data);
+            set({ authUser: res.data });
+            toast.success(res.data.message);
+        } catch (error) {
+            toast.error(error.response.data.message);
+            console.log('error in login:', error);
+
+        }
+        finally {
+            set({ isLoggingIn: false });
+        }
+    },
+
+    updateProfile: async (data) => {
+        set({ isUpdatingProfile: true });
+        try {
+            const res = await axiosInstance.put('/auth/update-profile', data,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }
+            );
+            set({ authUser: res.data });
+            toast.success(res.data.message);
+        } catch (error) {
+            toast.error(error.response.data.message);
+            console.log('error in update profile picture:', error);
+        }
+        finally {
+            set({ isUpdatingProfile: false });
+        }
+        //2:26:00
     }
+
 }));
