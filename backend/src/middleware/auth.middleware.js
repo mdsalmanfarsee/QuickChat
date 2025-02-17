@@ -3,8 +3,8 @@ import User from '../models/user.model.js';
 
 
 export const protectRoute = async (req, res, next) => {
-    //const token = req.cookies.jwt;
-    const token = localStorage.getItem("jwt");
+    const token = req.cookies.jwt;
+    //const token = localStorage.getItem("jwt");
     if (!token) {
         return res.status(401).json({ message: "You need to login first" });
     }
