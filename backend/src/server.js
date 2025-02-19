@@ -5,10 +5,11 @@ import cookieParser from 'cookie-parser';
 import connectDB from './lib/db.js';
 import authRouter from './routes/auth.route.js';
 import messageRouter from './routes/message.route.js';
+import { io, server, app } from './lib/socket.js';
 
 
 dotenv.config();
-const app = express();
+
 // Connect to database
 connectDB();
 const PORT = process.env.PORT || 5000;
@@ -34,6 +35,6 @@ app.get('/', (req, res) => {
 
 
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 })

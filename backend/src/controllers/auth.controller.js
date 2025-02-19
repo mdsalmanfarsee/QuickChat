@@ -2,8 +2,6 @@ import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import { generateToken } from "../lib/utils.js";
 import cloudinary from "../lib/cloudinary.js";
-import { Readable } from 'stream';
-
 
 
 
@@ -98,38 +96,22 @@ const logout = (req, res) => {
 }
 
 const updateProfile = async (req, res) => {
-    const file = req.file;
-    if (!file) {
+    const { profilepic } = req.body;
+
+    if (profilepic === null || profilepic === undefined) {
         return res.status(400).json({ message: "Please provide profile picture" });
     }
 
 
-    //convert buffer to readable stream and upload to cloudinary
-
     try {
-        //upload to cloudinary
-        const uploadToCloudinary = () => {
-            return new Promise((resolve, reject) => {
-                const stream = cloudinary.uploader.upload_stream(
-                    { folder: "QuickChat" },
-                    (error, result) => {
-                        if (error) {
-                            reject(error);
-                        } else {
-                            resolve(result.secure_url);
-                        }
-                    }
-                );
-                Readable.from(file.buffer).pipe(stream); // Pipe buffer to Cloudinary stream
-            });
-        };
-        const imageUrl = await uploadToCloudinary();
+
+        const upload = await cloudinary.uploader.upload(profilepic);
+        const imageUrl = upload.secure_url;
 
         //update user profile pic
         const userId = req.user._id;
         const updatedUser = await User.findByIdAndUpdate(userId, { profilepic: imageUrl }, { new: true });
 
-        //return res.status(200).json({ updatedUser, message: "Profile picture updated successfully" });
         return res.status(200).json({
             message: "Profile picture updated successfully",
             _id: updatedUser._id,

@@ -92,4 +92,5 @@ const sendMessage = async (req, res) => {
     }
 }
 
+
 export { getUsersForSidebar, getMessages, sendMessage };
