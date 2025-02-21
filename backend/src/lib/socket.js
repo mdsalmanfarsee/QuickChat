@@ -13,7 +13,8 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
     cors: {
-        origin: [FRONTEND_URL, "http://localhost:5173"],
+        //origin: [FRONTEND_URL, "http://localhost:5173"],
+        origin: "*",
         credentials: true,
         methods: ["GET", "POST"],
         allowedHeaders: ["Content-Type", "Authorization"],
