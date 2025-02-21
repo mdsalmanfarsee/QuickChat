@@ -1,6 +1,7 @@
 import User from "../models/user.model.js";
 import Message from "../models/message.model.js"
 import cloudinary from "../lib/cloudinary.js";
+import { io, getRecieverSocketId } from "../lib/socket.js";
 
 const getUsersForSidebar = async (req, res) => {
     try {
@@ -52,26 +53,6 @@ const sendMessage = async (req, res) => {
         }
 
 
-        // if (imageFile) {
-        //     //upload to cloudinary
-        //     const uploadToCloudinary = () => {
-        //         return new Promise((resolve, reject) => {
-        //             const stream = cloudinary.uploader.upload_stream(
-        //                 { folder: "QuickChat" },
-        //                 (error, result) => {
-        //                     if (error) {
-        //                         reject(error);
-        //                     } else {
-        //                         resolve(result.secure_url);
-        //                     }
-        //                 }
-        //             );
-        //             Readable.from(imageFile.buffer).pipe(stream); // Pipe buffer to Cloudinary stream
-        //         });
-        //     };
-        //     imageUrl = await uploadToCloudinary();
-        // }
-
         const newMessage = new Message({
             senderId,
             receiverId,
@@ -82,7 +63,12 @@ const sendMessage = async (req, res) => {
 
         await newMessage.save();
 
-        //todo: send socket.io message to the receiver
+        //send socket.io message to the receiver
+        const recieverSocketId = getRecieverSocketId(receiverId);
+        if (recieverSocketId) {
+            io.to(recieverSocketId).emit("newMessage", newMessage);
+        }
+        io.to(senderId).emit("newMessage", newMessage);
 
         return res.status(200).json(newMessage);
 

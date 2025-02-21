@@ -15,16 +15,18 @@ import EncryptionNotice from './EncryptionNotice.jsx';
 
 const ChatContainer = () => {
 
-    const { messages, getMessages, isMessagesLoading, selectedUser } = useChatStore();
+    const { messages, getMessages, isMessagesLoading, selectedUser, subscribeToMessages, unsubscribeFromMessages } = useChatStore();
     const { authUser } = useAuthStore();
 
     const messagesEndRef = useRef(null); // Ref to track the end of messages
 
     useEffect(() => {
-        if (selectedUser) {
-            getMessages(selectedUser._id);
-        }
-    }, [selectedUser, getMessages]);
+
+        getMessages(selectedUser._id);
+        subscribeToMessages();
+
+        return () => unsubscribeFromMessages();
+    }, [messages, selectedUser, getMessages, unsubscribeFromMessages, subscribeToMessages]);
 
 
     // Scroll to bottom when messages change
@@ -79,7 +81,8 @@ const ChatContainer = () => {
                                     {formatMessageTime(message.createdAt)}
                                 </time>
                             </div>
-                            <div className='chat-bubble flex flex-col'>
+                            <div className={`chat-bubble flex flex-col rounded-xl shadow-sm 
+                                ${message.senderId === authUser._id ? "bg-primary text-primary-content" : "bg-base-200 text-base-content"}`}>
                                 {message.image && (
                                     <img
                                         src={message.image}
@@ -93,7 +96,7 @@ const ChatContainer = () => {
                                 {/* Sent/Seen Status for Last Sent Message */}
                                 {isLastSentMessage && (
                                     <div className="text-xs flex items-center justify-end mt-1 text-gray-500">
-                                        {message.seen ? (
+                                        {message.seen === "true" ? (
                                             <>
                                                 <CheckCheck size={16} className="text-blue-500 mr-1" /> Seen
                                             </>

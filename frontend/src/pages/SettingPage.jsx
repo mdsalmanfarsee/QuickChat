@@ -107,6 +107,5 @@ const SettingPage = () => {
     )
 }
 
-// 2:41:00
 
 export default SettingPage

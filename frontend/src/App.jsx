@@ -30,8 +30,8 @@ const App = () => {
   console.log({ authUser }); //for debug purposes
   if (isCheckingAuth && !authUser) {
     return (
-      <div className='flex justify-center items-center h-screen'>
-        <Loader className='size-10 animate-spin' />
+      <div className='flex justify-center items-center h-screen' data-theme={theme}>
+        <Loader className='size-10 animate-spin bg-base-100' />
       </div>
     )
   }
