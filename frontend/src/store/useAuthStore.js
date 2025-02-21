@@ -101,7 +101,9 @@ export const useAuthStore = create((set, get) => ({
         const socket = io(BASE_URL, {
             query: {
                 userId: authUser._id,
-            }
+            },
+            transports: ["polling", "websocket"], // Force polling first
+            withCredentials: true,
         });
         socket.connect();
 
