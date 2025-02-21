@@ -3,7 +3,8 @@ import { axiosInstance } from '../lib/axios.js';
 import toast from 'react-hot-toast';
 import { io } from 'socket.io-client';
 
-const BASE_URL = 'http://localhost:3001';
+//const BASE_URL = 'http://localhost:3001';
+const BASE_URL = 'https://quick-chat-backend-murex.vercel.app/api';
 
 export const useAuthStore = create((set, get) => ({
     authUser: null,

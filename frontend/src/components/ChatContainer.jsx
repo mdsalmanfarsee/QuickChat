@@ -66,6 +66,7 @@ const ChatContainer = () => {
                         <div
                             key={message._id}
                             className={`chat ${message.senderId === authUser._id ? "chat-end" : "chat-start"}`}
+                            ref={messagesEndRef}
                         >
                             <div className='chat-image avatar'>
                                 <div className='size-10 rounded-full border'>
@@ -111,8 +112,7 @@ const ChatContainer = () => {
                         </div>
                     )
                 })}
-                {/* Invisible div at the end of messages for scrolling */}
-                <div ref={messagesEndRef} />
+
             </div>
 
             <MessageInput />
