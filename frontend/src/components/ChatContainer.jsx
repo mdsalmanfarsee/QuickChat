@@ -20,6 +20,7 @@ const ChatContainer = () => {
 
     const messagesEndRef = useRef(null); // Ref to track the end of messages
     const chatContainerRef = useRef(null); // Ref to track the chat container
+    const [isAtBottom, setIsAtBottom] = useState(true); // Track if user is at the bottom of the chat
 
     useEffect(() => {
 
