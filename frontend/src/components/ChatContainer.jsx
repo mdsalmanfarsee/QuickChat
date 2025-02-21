@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useChatStore } from '../store/useChatStore.js'
 import { useAuthStore } from '../store/useAuthStore.js';
 import { formatMessageTime } from '../lib/utils.js';
