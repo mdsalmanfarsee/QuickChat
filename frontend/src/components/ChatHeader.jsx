@@ -17,6 +17,10 @@ const ChatHeader = () => {
     //set selected user to null if press back button
     useEffect(() => {
 
+        if (selectedUser) {
+            window.history.pushState(null, "", window.location.href); //remove chat id from url
+        }
+
         const handleBackButton = () => {
 
             if (selectedUser) {

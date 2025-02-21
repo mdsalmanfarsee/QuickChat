@@ -38,9 +38,9 @@ const ChatContainer = () => {
         const handleScroll = () => {
             if (chatContainerRef.current) {
                 const { scrollTop, scrollHeight, clientHeight } = chatContainerRef.current;
-                const bottomThreshold = 30; // Allow some margin
+                const bottomThreshold = 8; // Allow some margin
 
-                // User is at the bottom if they are within 50px of the bottom
+                // User is at the bottom if they are within 8px of the bottom
                 setIsAtBottom(scrollHeight - scrollTop - clientHeight < bottomThreshold);
             }
         };
