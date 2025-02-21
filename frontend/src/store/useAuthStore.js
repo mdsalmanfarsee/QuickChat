@@ -4,7 +4,8 @@ import toast from 'react-hot-toast';
 import { io } from 'socket.io-client';
 
 //const BASE_URL = 'http://localhost:3001';
-const BASE_URL = 'https://quick-chat-backend-murex.vercel.app/api';
+//const BASE_URL = 'https://quick-chat-backend-murex.vercel.app/api';
+const BASE_URL = 'https://quickchat-backend-nonq.onrender.com';
 
 export const useAuthStore = create((set, get) => ({
     authUser: null,
@@ -102,8 +103,8 @@ export const useAuthStore = create((set, get) => ({
             query: {
                 userId: authUser._id,
             },
-            transports: ["polling", "websocket"], // Force polling first
-            withCredentials: true,
+            // transports: ["polling", "websocket"], // Force polling first
+            // withCredentials: true,
         });
         socket.connect();
 
