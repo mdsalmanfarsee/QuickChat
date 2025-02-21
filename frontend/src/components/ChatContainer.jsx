@@ -22,6 +22,7 @@ const ChatContainer = () => {
     const chatContainerRef = useRef(null); // Ref to track the chat container
     const [isAtBottom, setIsAtBottom] = useState(true); // Track if user is at the bottom of the chat
 
+
     useEffect(() => {
 
         getMessages(selectedUser._id);
@@ -31,20 +32,13 @@ const ChatContainer = () => {
     }, [messages, selectedUser, getMessages, unsubscribeFromMessages, subscribeToMessages]);
 
 
-    // Scroll to bottom when messages change
-    // useEffect(() => {
-    //     if (messagesEndRef.current) {
-    //         messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
-    //     }
-    // }, [messages]);
-
 
     // Detect if user scrolls up manually
     useEffect(() => {
         const handleScroll = () => {
             if (chatContainerRef.current) {
                 const { scrollTop, scrollHeight, clientHeight } = chatContainerRef.current;
-                const bottomThreshold = 50; // Allow some margin
+                const bottomThreshold = 30; // Allow some margin
 
                 // User is at the bottom if they are within 50px of the bottom
                 setIsAtBottom(scrollHeight - scrollTop - clientHeight < bottomThreshold);
@@ -68,6 +62,7 @@ const ChatContainer = () => {
             messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
         }
     }, [messages, isAtBottom]);
+
 
 
 

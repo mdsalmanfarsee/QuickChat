@@ -1,6 +1,8 @@
 import { X } from 'lucide-react'
 import { useAuthStore } from '../store/useAuthStore.js'
 import { useChatStore } from '../store/useChatStore.js'
+import { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 
 
@@ -10,6 +12,32 @@ const ChatHeader = () => {
 
     const { selectedUser, setSelectedUser } = useChatStore();
     const { onlineUsers } = useAuthStore();
+    const navigate = useNavigate();
+
+    //set selected user to null if press back button
+    useEffect(() => {
+
+        const handleBackButton = () => {
+
+            if (selectedUser) {
+                setSelectedUser(null); //close chat on press back button
+                return;
+            }
+
+            navigate(-1); //Default back button if no chat is open
+        };
+
+        window.onpopstate = handleBackButton;
+
+        return () => {
+            window.onpopstate = null; //cleanup
+        }
+
+
+    }, [selectedUser, navigate]);
+
+
+
 
     return (
         <div className='p-2.5 border-b border-base-300'>
