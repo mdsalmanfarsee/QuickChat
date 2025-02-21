@@ -21,13 +21,13 @@ const App = () => {
   const { authUser, checkAuth, isCheckingAuth, onlineUsers } = useAuthStore();
   const { theme } = useThemeStore();
 
-  console.log("onlineUsers: ", onlineUsers); //for debug purposes
+  //console.log("onlineUsers: ", onlineUsers); //for debug purposes
 
   useEffect(() => {
     checkAuth();
   }, [checkAuth])
 
-  console.log({ authUser }); //for debug purposes
+  //console.log({ authUser }); //for debug purposes
   if (isCheckingAuth && !authUser) {
     return (
       <div className='flex justify-center items-center h-screen' data-theme={theme}>

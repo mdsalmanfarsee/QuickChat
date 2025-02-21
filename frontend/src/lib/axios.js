@@ -1,8 +1,9 @@
 import axios from 'axios';
 
+const operation = import.meta.env.VITE_OPERATION;
+const url = operation === "dev" ? "http://localhost:3001/api" : import.meta.env.VITE_BACKEND_URL + "/api";
+
 export const axiosInstance = axios.create({
-    //baseURL: 'http://localhost:3001/api',
-    //baseURL: 'https://quick-chat-backend-murex.vercel.app/api',
-    baseURL: 'https://quickchat-backend-nonq.onrender.com/api',
+    baseURL: url,
     withCredentials: true,
 })

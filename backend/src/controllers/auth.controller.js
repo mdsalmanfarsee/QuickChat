@@ -42,7 +42,7 @@ const signup = async (req, res) => {
                 profilepic: newUser.profilepic,
                 fullName: newUser.fullName,
                 email: newUser.email,
-                createdAt: user.createdAt,
+                createdAt: newUser.createdAt,
             });
 
         }
@@ -51,7 +51,7 @@ const signup = async (req, res) => {
         }
 
     } catch (error) {
-
+        return res.status(400).json({ message: "Something went wrong in signup" });
     }
 }
 
@@ -87,8 +87,15 @@ const login = async (req, res) => {
 
 
 const logout = (req, res) => {
+    const val1 = process.env.OPERATION === "production";
+    const val2 = process.env.OPERATION === "production" ? "None" : "Lax";
+
     try {
-        res.clearCookie("jwt");
+        res.clearCookie("jwt", {
+            httpOnly: true,
+            secure: process.env.OPERATION === "production",
+            sameSite: process.env.OPERATION === "production" ? "None" : "Lax",
+        });
         return res.status(200).json({ message: "User logged out successfully" });
     } catch (error) {
         return res.status(500).json({ message: "Internal server error" });

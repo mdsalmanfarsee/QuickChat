@@ -13,14 +13,15 @@ dotenv.config();
 // Connect to database
 connectDB();
 const PORT = process.env.PORT || 5000;
-const FRONTEND_URL = process.env.FRONTEND_URL;
+const mode = process.env.OPERATION;
+const FRONTEND_URL = mode === "production" ? process.env.FRONTEND_URL : 'http://localhost:5173';
 
 
 app.use(express.json({ limit: '5mb' }));
 app.use(express.urlencoded({ limit: '5mb', extended: true }));
 app.use(cookieParser());
 app.use(cors({
-    origin: [FRONTEND_URL, 'http://localhost:5173'],
+    origin: [FRONTEND_URL],
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization'],
 }))

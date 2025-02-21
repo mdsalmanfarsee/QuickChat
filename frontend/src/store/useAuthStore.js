@@ -3,9 +3,9 @@ import { axiosInstance } from '../lib/axios.js';
 import toast from 'react-hot-toast';
 import { io } from 'socket.io-client';
 
-//const BASE_URL = 'http://localhost:3001';
-//const BASE_URL = 'https://quick-chat-backend-murex.vercel.app/api';
-const BASE_URL = 'https://quickchat-backend-nonq.onrender.com';
+const mode = import.meta.env.OPERATION;
+const url = import.meta.env.VITE_BACKEND_URL;
+const BASE_URL = mode === "dev" ? 'http://localhost:3001' : url;
 
 export const useAuthStore = create((set, get) => ({
     authUser: null,
@@ -20,6 +20,8 @@ export const useAuthStore = create((set, get) => ({
     checkAuth: async () => {
         try {
             const res = await axiosInstance.get('/auth/check');
+
+
             set({ authUser: res.data.user });
             get().connectSocket();
         } catch (error) {
@@ -36,6 +38,8 @@ export const useAuthStore = create((set, get) => ({
         set({ isSigningUp: true });
         try {
             const res = await axiosInstance.post('/auth/signup', data);
+            console.log('res in signup:', res.data);
+
             set({ authUser: res.data });
             toast.success(res.data.message);
 
