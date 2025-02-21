@@ -19,8 +19,8 @@ const ChatContainer = () => {
     const { authUser } = useAuthStore();
 
     const messagesEndRef = useRef(null); // Ref to track the end of messages
-    const chatContainerRef = useRef(null); // Ref to track the chat container
-    const [isAtBottom, setIsAtBottom] = useState(true); // Track if user is at the bottom of the chat
+    //const chatContainerRef = useRef(null); // Ref to track the chat container
+    //const [isAtBottom, setIsAtBottom] = useState(true); // Track if user is at the bottom of the chat
 
 
     useEffect(() => {
@@ -34,34 +34,42 @@ const ChatContainer = () => {
 
 
     // Detect if user scrolls up manually
-    useEffect(() => {
-        const handleScroll = () => {
-            if (chatContainerRef.current) {
-                const { scrollTop, scrollHeight, clientHeight } = chatContainerRef.current;
-                const bottomThreshold = 3; // Allow some margin
+    // useEffect(() => {
+    //     const handleScroll = () => {
+    //         if (chatContainerRef.current) {
+    //             const { scrollTop, scrollHeight, clientHeight } = chatContainerRef.current;
+    //             const bottomThreshold = 3; // Allow some margin
 
-                // User is at the bottom if they are within 3px of the bottom
-                setIsAtBottom(scrollHeight - scrollTop - clientHeight < bottomThreshold);
-            }
-        };
+    //             // User is at the bottom if they are within 3px of the bottom
+    //             setIsAtBottom(scrollHeight - scrollTop - clientHeight < bottomThreshold);
+    //         }
+    //     };
 
-        if (chatContainerRef.current) {
-            chatContainerRef.current.addEventListener("scroll", handleScroll);
-        }
+    //     if (chatContainerRef.current) {
+    //         chatContainerRef.current.addEventListener("scroll", handleScroll);
+    //     }
 
-        return () => {
-            if (chatContainerRef.current) {
-                chatContainerRef.current.removeEventListener("scroll", handleScroll);
-            }
-        };
-    }, []);
+    //     return () => {
+    //         if (chatContainerRef.current) {
+    //             chatContainerRef.current.removeEventListener("scroll", handleScroll);
+    //         }
+    //     };
+    // }, []);
 
     // Auto-scroll only when new messages arrive AND user is at bottom
+    // useEffect(() => {
+    //     if (isAtBottom && messagesEndRef.current) {
+    //         messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    //     }
+    // }, [messages, isAtBottom]);
+
+
+
     useEffect(() => {
-        if (isAtBottom && messagesEndRef.current) {
+        if (messagesEndRef.current) {
             messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
         }
-    }, [messages, isAtBottom]);
+    }, [messages]);
 
 
 
@@ -84,7 +92,7 @@ const ChatContainer = () => {
             <ChatHeader />
 
 
-            <div ref={chatContainerRef} className='flex-1 overflow-y-auto p-4 space-y-4'>
+            <div ref={messagesEndRef} className='flex-1 overflow-y-auto p-4 space-y-4'>
                 <EncryptionNotice />
                 {messages.map((message, index) => {
 
@@ -144,7 +152,6 @@ const ChatContainer = () => {
                     )
                 })}
                 {/* Empty div at the end for smooth scrolling */}
-                <div ref={messagesEndRef} />
 
             </div>
 
